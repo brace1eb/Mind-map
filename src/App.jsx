@@ -281,10 +281,20 @@ function MNode({node,transform,onLabel,onChecklist,onDrag,onColor,onActionSheet,
         outline:linkingFrom===node.id?`2px dashed ${node.color}`:"none"}}>
       {isSticky&&<div style={{width:"100%",height:14*transform.scale,background:node.color+"55",borderRadius:"10px 10px 0 0",flexShrink:0}}/>}
       {editing?(
-        <textarea value={draft} onChange={e=>setDraft(e.target.value)} onBlur={finish}
-          onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();finish();}}}
-          autoFocus style={{width:"80%",background:"transparent",border:"none",outline:"none",color:"#111",
-            fontSize:(node.isCenter?16:13)*transform.scale,textAlign:"center",resize:"none",overflow:"hidden",lineHeight:1.3}} rows={2}/>
+        <>
+          <textarea value={draft} onChange={e=>setDraft(e.target.value)}
+            onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();finish();}}}
+            autoFocus style={{width:"80%",background:"transparent",border:"none",outline:"none",color:"#111",
+              fontSize:(node.isCenter?16:13)*transform.scale,textAlign:"center",resize:"none",overflow:"hidden",lineHeight:1.3}} rows={2}/>
+          {/* Floating Done button — sits above the iPad keyboard */}
+          <div onPointerDown={e=>{e.stopPropagation();finish();}}
+            style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",
+              background:node.color,borderRadius:24,padding:"12px 40px",
+              color:"#fff",fontSize:17,fontWeight:700,zIndex:9999,
+              boxShadow:"0 4px 20px rgba(0,0,0,0.2)",cursor:"pointer",touchAction:"none"}}>
+            Done
+          </div>
+        </>
       ):(
         <span style={{color:"#111",fontSize:(node.isCenter?16:13)*transform.scale,textAlign:"center",
           padding:"0 8px",lineHeight:1.3,wordBreak:"break-word",maxWidth:"90%",pointerEvents:"none"}}>{node.label}</span>
